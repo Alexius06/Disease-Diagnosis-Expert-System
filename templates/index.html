@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Medical Diagnosis System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h2 class="mb-4">Medical Diagnosis Expert System</h2>
+
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" class="mb-4">
+      <div class="row">
+        {% for symptom in symptoms %}
+        <div class="col-md-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="symptoms" value="{{ symptom }}"
+                   id="{{ symptom }}" {% if selected and symptom in selected %}checked{% endif %}>
+            <label class="form-check-label" for="{{ symptom }}">{{ symptom.replace("_", " ").title() }}</label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Diagnose</button>
+    </form>
+
+    {% if forward and decision %}
+    <hr>
+    <h4>Diagnosis Results</h4>
+
+    <h5 class="mt-3">🧠 Forward Chaining Results:</h5>
+    <ul>
+      {% for disease, confidence in forward %}
+      <li>{{ disease.title() }} — Confidence: {{ confidence }}%</li>
+      {% endfor %}
+    </ul>
+
+    <h5 class="mt-3">🌳 Decision Tree Prediction:</h5>
+    <p><strong>{{ decision[0].title() }}</strong> — Confidence: {{ decision[1] }}%</p>
+
+    <div class="alert alert-warning mt-4">
+      <strong>Disclaimer:</strong> This system is for educational purposes only and does not replace professional medical advice.
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>
